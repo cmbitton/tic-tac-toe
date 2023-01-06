@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body{
+    background-color: #CCC;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 40px;
+    font-size: 4rem;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(3, minMax(100px, 200px));
+    grid-template-rows: repeat(3, clamp(50px, 30vw, 200px));
+    gap: 10px;
+    margin: 20px;
+    background-color: #333;
+}
+
+.board-tile{
+    background-color: #CCC;
+    width: 100%;
+    height: 100%;
+}
