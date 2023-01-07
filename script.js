@@ -22,7 +22,9 @@ const gameBoard = (function () {
     }
 
     const updateBoardValues = (row, column, player) => {
+        if ((boardValues[row - 1][column - 1] === null)){
         (player === 1) ? boardValues[row - 1][column - 1] = 'X' : boardValues[row - 1][column - 1] = 'O'
+        }
     }
 
     return { loadBoard,
@@ -36,7 +38,6 @@ const player = (name, number) => {
 
 const game = (function () {
     const placeMarker = () => {
-        console.log('1')
         const board = document.querySelectorAll('.board-tile');
         for (const tile of board) {
             tile.addEventListener('click', (e) => {
@@ -61,6 +62,5 @@ const game = (function () {
 })();
 
 gameBoard.loadBoard();
-console.log(gameBoard.getCount())
 
 game.placeMarker();
