@@ -35,33 +35,32 @@ const player = (name, number) => {
 }
 
 const game = (function () {
-    const placeMarker = (player) => {
+    const placeMarker = () => {
+        console.log('1')
         const board = document.querySelectorAll('.board-tile');
         for (const tile of board) {
             tile.addEventListener('click', (e) => {
                 const markerRow = +e.target.getAttribute('data-row');
                 const markerColumn = +e.target.getAttribute('data-column');
-                gameBoard.updateBoardValues(markerRow, markerColumn, player);
+                const count = gameBoard.getCount();
+                if(count.amountX > count.amountO){
+                    gameBoard.updateBoardValues(markerRow, markerColumn, 2);
+                }
+                else{
+                    gameBoard.updateBoardValues(markerRow, markerColumn, 1);
+                }
+                
                 gameBoard.loadBoard();
-                playTurn();
+
             })
         }
     }
 
-    const playTurn = () => {
-        const count = gameBoard.getCount();
-        if(count.amountX > count.amountO){
-            placeMarker(2);
-        }
-        else{
-            placeMarker(1);
-        }
 
-    }
-    return { placeMarker, playTurn }
+    return { placeMarker }
 })();
 
 gameBoard.loadBoard();
 console.log(gameBoard.getCount())
 
-game.placeMarker(1);
+game.placeMarker();
