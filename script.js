@@ -12,12 +12,13 @@ const gameBoard = (function () {
        }
        return {amountX, amountO};
     }
+
     const loadBoard = () => {
         const board = document.querySelectorAll('.board-tile');
         for (const tile of board) {
             const boardRow = +tile.getAttribute('data-row');
             const boardColumn = +tile.getAttribute('data-column');
-            tile.textContent = boardValues[boardRow - 1][boardColumn - 1]
+            tile.textContent = boardValues[boardRow - 1][boardColumn - 1];
         }
     }
 
@@ -59,6 +60,26 @@ const player = (name, number) => {
 
 const game = (function () {
     let gameWon = false;
+    
+    const playGame = () => {
+        const playButton = document.querySelector('.play-button');
+        const gameBoard = document.querySelector('.game-board');
+        playButton.addEventListener('click', () => {
+            playButton.classList.add('hidden');
+            gameBoard.classList.remove('hidden');
+        })
+    }
+
+    const displayWin = () => {
+        if(gameBoard.checkForWin('X') || gameBoard.checkForWin('O')) {
+            console.log('WIN!');
+            gameWon = true;
+        }
+        else if (gameBoard.checkForWin('X') === false){
+            console.log('tie')
+        }
+    }
+
     const placeMarker = () => {
         const board = document.querySelectorAll('.board-tile');
         for (const tile of board) {
@@ -74,22 +95,15 @@ const game = (function () {
                 }
                 
                 gameBoard.loadBoard();
-                if(gameBoard.checkForWin('X') || gameBoard.checkForWin('O')) {
-                    console.log('WIN!');
-                    gameWon = true;
-                }
-                else if (gameBoard.checkForWin('X') === false){
-                    console.log('tie')
-                }
-
+                displayWin();
             })
         }
     }
 
 
-    return { placeMarker }
+    return { placeMarker, playGame }
 })();
 
-gameBoard.loadBoard();
 
+game.playGame();
 game.placeMarker();
