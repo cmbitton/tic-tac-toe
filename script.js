@@ -28,6 +28,7 @@ const gameBoard = (function () {
     }
 
     const checkForWin = (letter) => {
+        const gameCount = gameBoard.getCount();
         if (//win by row
             (boardValues[0][0] === letter && boardValues[0][1] === letter && boardValues[0][2] === letter) ||
             (boardValues[1][0] === letter && boardValues[1][1] === letter && boardValues[1][2] === letter) ||
@@ -42,6 +43,7 @@ const gameBoard = (function () {
         ) {
             return true;
         }
+        else if (gameCount.amountO + gameCount.amountX === 9) return false;
 
     }
 
@@ -74,7 +76,11 @@ const game = (function () {
                 gameBoard.loadBoard();
                 if(gameBoard.checkForWin('X') || gameBoard.checkForWin('O')) {
                     console.log('WIN!');
-                    gameWon = true;}
+                    gameWon = true;
+                }
+                else if (gameBoard.checkForWin('X') === false){
+                    console.log('tie')
+                }
 
             })
         }

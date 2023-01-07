@@ -13,14 +13,14 @@ body{
 }
 
 h1 {
-    margin: 40px;
-    font-size: 4rem;
+    margin: 30px;
+    font-size: min(10vw,4rem);
 }
 
 main {
     display: grid;
-    grid-template-columns: repeat(3, minMax(100px, 200px));
-    grid-template-rows: repeat(3, clamp(50px, 30vw, 200px));
+    grid-template-columns: repeat(3, minMax(100px, 150px));
+    grid-template-rows: repeat(3, clamp(50px, 30vw, 150px));
     gap: 10px;
     margin: 20px;
     background-color: #333;
