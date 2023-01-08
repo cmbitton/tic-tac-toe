@@ -31,6 +31,22 @@ const gameBoard = (function () {
         }
     }
 
+    const resetBoard = () => {
+        for(let i = 0; i < 3; i++){
+            for(let j = 0; j < 3; j++){
+                boardValues[i][j] = null;
+            }
+        }
+    }
+
+    const removeSelectedClass = () => {
+        const board = document.querySelectorAll('.board-tile');
+        for(const tile of board){
+            if(tile.classList.contains('selected')) tile.classList.remove('selected'); 
+        }
+    }
+
+
     const checkForWin = (letter) => {
         const gameCount = gameBoard.getCount();
         if (//win by row
@@ -54,7 +70,9 @@ const gameBoard = (function () {
     return { loadBoard,
              updateBoardValues,
              getCount,
-            checkForWin }
+             resetBoard,
+             removeSelectedClass,
+             checkForWin }
 })();
 
 const player = (name, number) => {
@@ -63,7 +81,8 @@ const player = (name, number) => {
 
 const infoMod = (function() {
     const infoScreen = document.querySelector('.game-info');
-    
+    const replayButton = document.querySelector('.replay-button');
+
     const removeHiddenClass = () => {
         infoScreen.classList.remove('hidden');
     }
@@ -73,17 +92,27 @@ const infoMod = (function() {
     }
 
     const alertPlayerWin = (number) => {
+        replayButton.classList.remove('hidden');
+        game.replayGame();
         if (number <= 2){
         infoScreen.textContent = `Player ${number} is the Winner!`;}
         else {
             infoScreen.textContent = 'Tie!';
         }
     }
-    return { alertPlayerTurn, removeHiddenClass, alertPlayerWin }
+    const resetGameMessage = () => {
+        infoScreen.textContent = 'Player 1 - Your Turn!'
+    }
+    return { alertPlayerTurn, 
+             removeHiddenClass, 
+             alertPlayerWin, 
+             resetGameMessage }
 })();
 
 const game = (function () {
     let gameWon = false;
+    const replayButton = document.querySelector('.replay-button');
+
     const playGame = () => {
         const playButton = document.querySelector('.play-button');
         const board = document.querySelector('.game-board');
@@ -117,11 +146,11 @@ const game = (function () {
                 const count = gameBoard.getCount();
                 if(count.amountX > count.amountO && gameWon === false){
                     gameBoard.updateBoardValues(markerRow, markerColumn, 2);
-                    infoMod.alertPlayerTurn(1);
+                    if(!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(1);
                 }
                 else if (gameWon === false){
                     gameBoard.updateBoardValues(markerRow, markerColumn, 1);
-                    infoMod.alertPlayerTurn(2);
+                    if(!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(2);
                 }
                 
                 gameBoard.loadBoard();
@@ -130,8 +159,18 @@ const game = (function () {
         }
     }
 
+    const replayGame = () => {
+        replayButton.addEventListener('click', () => {
+            gameWon = false;
+            replayButton.classList.add('hidden');
+            gameBoard.resetBoard();
+            gameBoard.loadBoard();
+            gameBoard.removeSelectedClass();
+            infoMod.resetGameMessage();
+        })
+    }
 
-    return { placeMarker, playGame }
+    return { placeMarker, playGame, replayGame }
 })();
 
 

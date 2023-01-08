@@ -56,6 +56,19 @@ main {
     transition: all 200ms ease-in-out;
 }
 
+.replay-button{
+    display: flex;
+    cursor: pointer;
+    padding: 12px 20px;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.symbol {
+    font-size: 2rem;
+}
 .game-info{
     margin-bottom: 20px;
     font-size: 2rem;
