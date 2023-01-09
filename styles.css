@@ -112,6 +112,7 @@ input[type='text']{
 .game-info{
     margin-bottom: 20px;
     font-size: 2rem;
+    text-align: center;
 }
 .score{
     text-align: center;
