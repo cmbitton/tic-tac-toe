@@ -78,10 +78,18 @@ input[type='text']{
     display: flex;
     cursor: pointer;
     padding: 12px 20px;
+    border-radius: 3px;
+    border: none;
     font-size: 1.5rem;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    background-color: rgb(40, 216, 69);
+    transition: all 200ms ease-in-out;
+}
+
+.replay-button:hover{
+    transform: scale(1.1);
 }
 
 .symbol {

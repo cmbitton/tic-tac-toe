@@ -17,13 +17,13 @@
 
 <body>
     <h1>Tic-Tac-Toe</h1>
-    <div class="name-inputs">
+    <form action="#" class="name-inputs" id="name-form">
         <label for="player-1-name">Player 1 </label>
-        <input type="text" class="player-1-name" id="player-1-name" placeholder="Name">
+        <input type="text" class="player-1-name" id="player-1-name" placeholder="Name" required>
         <label for="player-2-name">Player 2 </label>
-        <input type="text" class="player-2-name" id="player-2-name" placeholder="Name">
-    </div>
-    <button class="play-button">Play</button>
+        <input type="text" class="player-2-name" id="player-2-name" placeholder="Name" required>
+    </form>
+    <button type="submit" class="play-button" form="name-form">Play</button>
     <div class="game-info hidden">Player 1 - Your Turn!</div>
     <button type="button" class="replay-button hidden">Play again?<span class="material-symbols-outlined symbol">
         replay

@@ -125,29 +125,23 @@ const infoMod = (function () {
 const game = (function () {
     let gameWon = false;
     const replayButton = document.querySelector('.replay-button');
-    let player1name;
-    let player2name;
-    let player1;
-    let player2;
+    const player1 = player();
+    const player2 = player();
     const playGame = () => {
         const playButton = document.querySelector('.play-button');
         const board = document.querySelector('.game-board');
-        playButton.addEventListener('click', () => {
-            game.player1name = document.querySelector('.player-1-name').value;
-            game.player2name = document.querySelector('.player-2-name').value;
-            game.player1 = game.createPlayer(game.player1name);
-            game.player2 = game.createPlayer(game.player2name);
-            playButton.classList.add('hidden');
-            board.classList.remove('hidden');
-            game.player1.toggleNameInputHidden();
-            infoMod.removeHiddenClass();
-            infoMod.alertPlayerTurn(1);
+        playButton.addEventListener('click', (e) => {
+            player1.name = document.querySelector('.player-1-name').value;
+            player2.name = document.querySelector('.player-2-name').value;
+            if (player1.name !== '' && player2.name !== '') {
+                e.preventDefault();
+                playButton.classList.add('hidden');
+                board.classList.remove('hidden');
+                game.player1.toggleNameInputHidden();
+                infoMod.removeHiddenClass();
+                infoMod.alertPlayerTurn(1);
+            }
         })
-    }
-
-    const createPlayer = (name) => {
-        const playerobj = Object.create(player(`${name}`));
-        return playerobj;
     }
 
     const displayWin = () => {
@@ -197,7 +191,7 @@ const game = (function () {
         })
     }
 
-    return { placeMarker, playGame, replayGame, createPlayer, player1, player2, player1name, player2name }
+    return { placeMarker, playGame, replayGame, player1, player2}
 })();
 
 
