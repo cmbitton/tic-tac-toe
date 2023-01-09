@@ -4,13 +4,13 @@ const gameBoard = (function () {
     const getCount = () => {
         let amountX = 0;
         let amountO = 0;
-       for(const row of boardValues){
-        for (const tile of row){
-            if (tile === 'X') amountX++;
-            else if(tile === 'O') amountO++;
+        for (const row of boardValues) {
+            for (const tile of row) {
+                if (tile === 'X') amountX++;
+                else if (tile === 'O') amountO++;
+            }
         }
-       }
-       return {amountX, amountO};
+        return { amountX, amountO };
     }
 
     const loadBoard = () => {
@@ -19,21 +19,21 @@ const gameBoard = (function () {
             const boardRow = +tile.getAttribute('data-row');
             const boardColumn = +tile.getAttribute('data-column');
             tile.textContent = boardValues[boardRow - 1][boardColumn - 1];
-            if(boardValues[boardRow - 1][boardColumn - 1] !== null) {
+            if (boardValues[boardRow - 1][boardColumn - 1] !== null) {
                 tile.classList.add('selected')
             };
         }
     }
 
     const updateBoardValues = (row, column, player) => {
-        if ((boardValues[row - 1][column - 1] === null)){
-        (player === 1) ? boardValues[row - 1][column - 1] = 'X' : boardValues[row - 1][column - 1] = 'O';
+        if ((boardValues[row - 1][column - 1] === null)) {
+            (player === 1) ? boardValues[row - 1][column - 1] = 'X' : boardValues[row - 1][column - 1] = 'O';
         }
     }
 
     const resetBoard = () => {
-        for(let i = 0; i < 3; i++){
-            for(let j = 0; j < 3; j++){
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
                 boardValues[i][j] = null;
             }
         }
@@ -41,8 +41,8 @@ const gameBoard = (function () {
 
     const removeSelectedClass = () => {
         const board = document.querySelectorAll('.board-tile');
-        for(const tile of board){
-            if(tile.classList.contains('selected')) tile.classList.remove('selected'); 
+        for (const tile of board) {
+            if (tile.classList.contains('selected')) tile.classList.remove('selected');
         }
     }
 
@@ -67,72 +67,99 @@ const gameBoard = (function () {
 
     }
 
-    return { loadBoard,
-             updateBoardValues,
-             getCount,
-             resetBoard,
-             removeSelectedClass,
-             checkForWin }
+    return {
+        loadBoard,
+        updateBoardValues,
+        getCount,
+        resetBoard,
+        removeSelectedClass,
+        checkForWin
+    }
 })();
 
-const player = (name, number) => {
-    return { name, number };
+const player = (name) => {
+    const playerNameInput = document.querySelector('.name-inputs');
+
+    const toggleNameInputHidden = () => {
+        if (playerNameInput.classList.contains('hidden')) {
+            playerNameInput.classList.remove('hidden');
+        }
+        else if (!playerNameInput.classList.contains('hidden')) {
+            playerNameInput.classList.add('hidden');
+        }
+    }
+    return { name, toggleNameInputHidden };
 }
 
-const infoMod = (function() {
+const infoMod = (function () {
     const infoScreen = document.querySelector('.game-info');
     const replayButton = document.querySelector('.replay-button');
 
     const removeHiddenClass = () => {
         infoScreen.classList.remove('hidden');
     }
-    
+
     const alertPlayerTurn = (number) => {
-        infoScreen.textContent = `Player ${number} - Your Turn!`;
+        (number === 1) ? infoScreen.textContent = `${game.player1.name} - Your Turn!` : infoScreen.textContent = `${game.player2.name} - Your Turn!`;
     }
 
     const alertPlayerWin = (number) => {
         replayButton.classList.remove('hidden');
         game.replayGame();
-        if (number <= 2){
-        infoScreen.textContent = `Player ${number} is the Winner!`;}
+        if (number <= 2) {
+            const winningPlayer = game[`player${number}`].name
+            infoScreen.textContent = `${winningPlayer} is the Winner!`;
+        }
         else {
             infoScreen.textContent = 'Tie!';
         }
     }
-    const resetGameMessage = () => {
-        infoScreen.textContent = 'Player 1 - Your Turn!'
+
+    return {
+        alertPlayerTurn,
+        removeHiddenClass,
+        alertPlayerWin,
     }
-    return { alertPlayerTurn, 
-             removeHiddenClass, 
-             alertPlayerWin, 
-             resetGameMessage }
 })();
 
 const game = (function () {
     let gameWon = false;
     const replayButton = document.querySelector('.replay-button');
-
+    let player1name;
+    let player2name;
+    let player1;
+    let player2;
     const playGame = () => {
         const playButton = document.querySelector('.play-button');
         const board = document.querySelector('.game-board');
         playButton.addEventListener('click', () => {
+            game.player1name = document.querySelector('.player-1-name').value;
+            game.player2name = document.querySelector('.player-2-name').value;
+            game.player1 = game.createPlayer(game.player1name);
+            game.player2 = game.createPlayer(game.player2name);
             playButton.classList.add('hidden');
             board.classList.remove('hidden');
+            game.player1.toggleNameInputHidden();
             infoMod.removeHiddenClass();
+            infoMod.alertPlayerTurn(1);
         })
     }
 
+    const createPlayer = (name) => {
+        const playerobj = Object.create(player(`${name}`));
+        return playerobj;
+    }
+
     const displayWin = () => {
-        if(gameBoard.checkForWin('X')) {
+        if (gameBoard.checkForWin('X')) {
             infoMod.alertPlayerWin(1);
             gameWon = true;
         }
-        else if(gameBoard.checkForWin('O')) {
+        else if (gameBoard.checkForWin('O')) {
             infoMod.alertPlayerWin(2);
             gameWon = true;
         }
-        else if (gameBoard.checkForWin('X') === false){
+        else if (gameBoard.checkForWin('X') === false) {
             infoMod.alertPlayerWin(3);
         }
     }
@@ -144,15 +171,15 @@ const game = (function () {
                 const markerRow = +e.target.getAttribute('data-row');
                 const markerColumn = +e.target.getAttribute('data-column');
                 const count = gameBoard.getCount();
-                if(count.amountX > count.amountO && gameWon === false){
+                if (count.amountX > count.amountO && gameWon === false) {
                     gameBoard.updateBoardValues(markerRow, markerColumn, 2);
-                    if(!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(1);
+                    if (!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(1);
                 }
-                else if (gameWon === false){
+                else if (gameWon === false) {
                     gameBoard.updateBoardValues(markerRow, markerColumn, 1);
-                    if(!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(2);
+                    if (!e.target.classList.contains('selected')) infoMod.alertPlayerTurn(2);
                 }
-                
+
                 gameBoard.loadBoard();
                 displayWin();
             })
@@ -166,11 +193,11 @@ const game = (function () {
             gameBoard.resetBoard();
             gameBoard.loadBoard();
             gameBoard.removeSelectedClass();
-            infoMod.resetGameMessage();
+            infoMod.alertPlayerTurn(1);
         })
     }
 
-    return { placeMarker, playGame, replayGame }
+    return { placeMarker, playGame, replayGame, createPlayer, player1, player2, player1name, player2name }
 })();
 
 

@@ -8,7 +8,7 @@
 }
 
 body{
-    background-color: #EEE;
+    background-color: #DDD;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +38,7 @@ main {
     height: 100%;
     font-size: max(6rem, 7vw);
     font-weight: bold;
-    background-color: #EEE;
+    background-color: #DDD;
 }
 
 .board-tile:not(.selected):hover{
@@ -54,6 +54,24 @@ main {
     cursor: pointer;
     box-shadow: 0px 0px 5px 1px #777;
     transition: all 200ms ease-in-out;
+}
+
+.name-inputs {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    row-gap: 10px;
+    margin-bottom: 30px;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+input[type='text']{
+    height: 40px;
+    border: none;
+    border-radius: 3px;
+    font-size: 1.3rem;
+    width: 200px;
+    padding: 5px;
 }
 
 .replay-button{
