@@ -79,7 +79,20 @@ const gameBoard = (function () {
 
 const player = (name) => {
     const playerNameInput = document.querySelector('.name-inputs');
-
+    let wins = 0;
+    let ties = 0;
+    const returnWins = () => {
+        return wins;
+    }
+    const incrementWins = () => {
+        wins += 1;
+    }
+    const incrementTies = () => {
+        ties += 1;
+    }
+    const returnTies = () => {
+        return ties;
+    }
     const toggleNameInputHidden = () => {
         if (playerNameInput.classList.contains('hidden')) {
             playerNameInput.classList.remove('hidden');
@@ -88,37 +101,45 @@ const player = (name) => {
             playerNameInput.classList.add('hidden');
         }
     }
-    return { name, toggleNameInputHidden };
+    return { name, toggleNameInputHidden, returnWins, incrementWins, incrementTies, returnTies};
 }
 
 const infoMod = (function () {
     const infoScreen = document.querySelector('.game-info');
     const replayButton = document.querySelector('.replay-button');
+    const infoMessage= document.querySelector('.info-message');
+    const score = document.querySelector('.score');
 
     const removeHiddenClass = () => {
         infoScreen.classList.remove('hidden');
     }
 
     const alertPlayerTurn = (number) => {
-        (number === 1) ? infoScreen.textContent = `${game.player1.name} - Your Turn!` : infoScreen.textContent = `${game.player2.name} - Your Turn!`;
+        (number === 1) ? infoMessage.textContent = `${game.player1.name} - Your Turn!` : infoMessage.textContent = `${game.player2.name} - Your Turn!`;
     }
 
     const alertPlayerWin = (number) => {
+        updateScore();
         replayButton.classList.remove('hidden');
         game.replayGame();
         if (number <= 2) {
             const winningPlayer = game[`player${number}`].name
-            infoScreen.textContent = `${winningPlayer} is the Winner!`;
+            infoMessage.textContent = `${winningPlayer} is the Winner!`;
         }
         else {
-            infoScreen.textContent = 'Tie!';
+            infoMessage.textContent = 'Tie!';
         }
+    }
+
+    const updateScore = () => {
+        const player1Score = game.player1.returnWins()
+        score.textContent = `${player1Score} - ${game.player1.returnTies()} - ${game.player2.returnWins()}`;
     }
 
     return {
         alertPlayerTurn,
         removeHiddenClass,
-        alertPlayerWin,
+        alertPlayerWin
     }
 })();
 
@@ -145,17 +166,24 @@ const game = (function () {
     }
 
     const displayWin = () => {
+        if(gameWon === false){
         if (gameBoard.checkForWin('X')) {
-            infoMod.alertPlayerWin(1);
             gameWon = true;
+            player1.incrementWins();
+            infoMod.alertPlayerWin(1);
         }
         else if (gameBoard.checkForWin('O')) {
-            infoMod.alertPlayerWin(2);
             gameWon = true;
+            player2.incrementWins();
+            infoMod.alertPlayerWin(2);
         }
         else if (gameBoard.checkForWin('X') === false) {
+            gameWon = true;
+            game.player1.incrementTies();
+            game.player2.incrementTies();
             infoMod.alertPlayerWin(3);
         }
+    }
     }
 
     const placeMarker = () => {

@@ -24,10 +24,10 @@
         <input type="text" class="player-2-name" id="player-2-name" placeholder="Name" required>
     </form>
     <button type="submit" class="play-button" form="name-form">Play</button>
-    <div class="game-info hidden">Player 1 - Your Turn!</div>
-    <button type="button" class="replay-button hidden">Play again?<span class="material-symbols-outlined symbol">
-        replay
-        </span></button>
+    <div class="game-info hidden">
+        <div class="info-message">Player 1 - Your Turn!</div>
+        <div class="score">0 - 0 - 0</div>
+    </div>
     <main class="game-board hidden">
         <div class="board-tile" data-column='1' data-row='1'></div>
         <div class="board-tile" data-column='2' data-row='1'></div>
@@ -39,7 +39,9 @@
         <div class="board-tile" data-column='2' data-row='3'></div>
         <div class="board-tile" data-column='3' data-row='3'></div>
     </main>
-
+    <button type="button" class="replay-button hidden">Play again?<span class="material-symbols-outlined symbol">
+        replay
+        </span></button>
 </body>
 
 </html>
