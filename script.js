@@ -146,6 +146,7 @@ const infoMod = (function () {
 const game = (function () {
     let gameWon = false;
     const replayButton = document.querySelector('.replay-button');
+    const resetButton = document.querySelector('.reset-button');
     const player1 = player();
     const player2 = player();
     const playGame = () => {
@@ -158,9 +159,11 @@ const game = (function () {
                 e.preventDefault();
                 playButton.classList.add('hidden');
                 board.classList.remove('hidden');
+                resetButton.classList.remove('hidden')
                 game.player1.toggleNameInputHidden();
                 infoMod.removeHiddenClass();
                 infoMod.alertPlayerTurn(1);
+                listenForReset();
             }
         })
     }
@@ -218,7 +221,12 @@ const game = (function () {
             infoMod.alertPlayerTurn(1);
         })
     }
+    const listenForReset = () => {
+        resetButton.addEventListener('click', () => {
+            location.reload();
+        })
 
+    }
     return { placeMarker, playGame, replayGame, player1, player2}
 })();
 
